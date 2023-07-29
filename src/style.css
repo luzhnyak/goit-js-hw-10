@@ -1,0 +1,15 @@
+img {
+  width: 600px;
+  /* display: block; */
+}
+
+.breed-select {
+  /* display: block; */
+}
+
+.loader {
+  display: none;
+}
+.error {
+  display: none;
+}
