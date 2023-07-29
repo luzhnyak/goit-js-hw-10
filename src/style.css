@@ -5,6 +5,7 @@ img {
 
 .breed-select {
   /* display: block; */
+  visibility: hidden;
 }
 
 .loader {

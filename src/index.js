@@ -12,11 +12,11 @@ selectEl.addEventListener('change', onBreedSelect);
 let breedsInfo;
 
 function onBreedSelect(event) {
-  breadId = event.target.value;
-  console.log(breadId);
   Notiflix.Loading.standard('Loading data, please wait...');
 
+  const breadId = event.target.value;
   const breedPr = fetchCatByBreed(breadId);
+
   breedPr
     .then(breedImg => {
       Notiflix.Loading.remove();
@@ -41,7 +41,7 @@ function createMarkupSelect(breeds) {
 
   selectEl.innerHTML = markupSelect;
   // selectEl.style.display = 'block';
-
+  selectEl.style.visibility = 'inherit';
   new SlimSelect({
     select: '.breed-select',
   });
