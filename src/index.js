@@ -2,32 +2,23 @@ import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 import Notiflix from 'notiflix';
 import SlimSelect from 'slim-select';
 
-const loaderEl = document.querySelector('.loader');
-const errorEl = document.querySelector('.error');
+// const loaderEl = document.querySelector('.loader');
+// const errorEl = document.querySelector('.error');
 const catInfoEl = document.querySelector('.cat-info');
 const selectEl = document.querySelector('.breed-select');
 
 selectEl.addEventListener('change', onBreedSelect);
 
-let breedsInfo;
-
 function onBreedSelect(event) {
   Notiflix.Loading.standard('Loading data, please wait...');
+  catInfoEl.innerHTML = '';
 
-  const breadId = event.target.value;
-  const breedPr = fetchCatByBreed(breadId);
+  const breedPr = fetchCatByBreed(event.target.value);
 
   breedPr
-    .then(breedImg => {
+    .then(breed => {
+      createMarkupCard(breed[0]);
       Notiflix.Loading.remove();
-      if (breedImg === 'error') {
-        Notiflix.Notify.failure(
-          'Oops! Something went wrong! Try reloading the page!'
-        );
-        return;
-      }
-
-      createMarkupBreed(breadId, breedImg);
     })
     .catch(error => {
       Notiflix.Loading.remove();
@@ -52,11 +43,9 @@ function createMarkupSelect(breeds) {
   });
 }
 
-function createMarkupBreed(breadId, breedImg) {
-  const { url } = breedImg[0];
-  const { name, description, temperament } = breedsInfo.find(
-    bread => bread.id === breadId
-  );
+function createMarkupCard(breed) {
+  const { url, breeds } = breed;
+  const { name, description, temperament } = breeds[0];
 
   const markupSelect = `
   <h1>${name}</h1>
@@ -70,23 +59,14 @@ function createMarkupBreed(breadId, breedImg) {
 Notiflix.Loading.standard('Loading data, please wait...');
 
 const breedsPr = fetchBreeds();
+
 breedsPr
   .then(breeds => {
-    if (breeds === 'error') {
-      Notiflix.Loading.remove();
-      Notiflix.Notify.failure(
-        'Oops! Something went wrong! Try reloading the page!'
-      );
-
-      return;
-    }
-
     createMarkupSelect(breeds);
-    Notiflix.Loading.remove();
 
-    breedsInfo = breeds;
+    Notiflix.Loading.remove();
   })
-  .catch(error => {
+  .catch(() => {
     Notiflix.Loading.remove();
     Notiflix.Notify.failure(
       'Oops! Something went wrong! Try reloading the page!'
